@@ -14,6 +14,9 @@ max_iter = 100
 num_partition = 4
 debug = True
 
+from pyspark import SparkContext
+sc = SparkContext("local", "Simple RDD")
+
 
 # In[3]:
 
