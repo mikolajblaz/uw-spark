@@ -5,6 +5,9 @@
 
 import time
 
+from pyspark import SparkContext
+sc = SparkContext("local", "Simple RDD")
+
 
 # In[2]:
 
@@ -12,10 +15,7 @@ import time
 file = "data/test-graph.txt"
 max_iter = 100
 num_partition = 4
-debug = True
-
-from pyspark import SparkContext
-sc = SparkContext("local", "Simple RDD")
+debug = False
 
 
 # In[3]:
@@ -84,7 +84,7 @@ for i in range(1, max_iter):
         break
     
     # Add new paths to all paths
-    all_paths = all_paths.union(new_paths).partitionBy(num_partition)
+    all_paths = all_paths.union(new_paths).coalesce(num_partition)
     all_paths.cache()
     
     if debug:
@@ -136,7 +136,7 @@ for i in range(1, max_iter):
         break
     
     # Add new paths to all paths
-    all_paths = all_paths.union(new_paths).partitionBy(num_partition)
+    all_paths = all_paths.union(new_paths).coalesce(num_partition)
     all_paths.cache()
     
     if debug:
@@ -183,7 +183,7 @@ for i in range(2, max_iter):
     new_x_all_paths = compose(new_paths, all_paths)
     new_x_new_paths = compose(new_paths, new_paths)
     # Leave only really new paths
-    all_paths = all_paths.union(new_paths).partitionBy(num_partition)
+    all_paths = all_paths.union(new_paths).coalesce(num_partition)
     all_paths.cache()
     new_paths = all_x_new_paths.union(new_x_all_paths).union(new_x_new_paths)
     new_paths = new_paths.subtract(all_paths).distinct(num_partition)
