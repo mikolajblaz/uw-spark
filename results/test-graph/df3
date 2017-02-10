@@ -1,0 +1,35 @@
+All lines: 16
+Correct lines: 11
+############# RDD: method 3 (paths combining) ###############
+________________________________
+Iteration #1:
+Number of new paths: 13
+
+Iteration time: 2.034736 s.
+________________________________
+Iteration #2:
+Number of new paths: 20
+
+Iteration time: 1.391023 s.
+________________________________
+Iteration #3:
+Number of new paths: 16
+
+Iteration time: 2.687282 s.
+________________________________
+Iteration #4:
+Number of new paths: 0
+
+Iteration time: 4.733055 s.
+No new paths, finishing...
+
+
+________________________________
+Total paths found: 60
+Number of iterations: #4
+
+Collecting time: 0.000127 s.
+Total time elapsed: 10.846223 s.
+________________________________
+
+

@@ -1,0 +1,57 @@
+All lines: 16
+Correct lines: 11
+############# DF: method 1 (single steps + delta) ###############
+NUM e: 2
+NUM n: 2
+________________________________
+Iteration #1:
+Number of new paths: 13
+
+Iteration time: 2.100554 s.
+________________________________
+Iteration #2:
+Number of new paths: 13
+
+Iteration time: 0.775521 s.
+________________________________
+Iteration #3:
+Number of new paths: 7
+
+Iteration time: 0.945103 s.
+________________________________
+Iteration #4:
+Number of new paths: 6
+
+Iteration time: 1.306959 s.
+________________________________
+Iteration #5:
+Number of new paths: 5
+
+Iteration time: 1.071343 s.
+________________________________
+Iteration #6:
+Number of new paths: 4
+
+Iteration time: 1.209878 s.
+________________________________
+Iteration #7:
+Number of new paths: 1
+
+Iteration time: 1.331389 s.
+________________________________
+Iteration #8:
+Number of new paths: 0
+
+Iteration time: 1.541799 s.
+No new paths, finishing...
+
+
+________________________________
+Total paths found: 60
+Number of iterations: #8
+
+Collecting time: 0.000065 s.
+Total time elapsed: 10.282611 s.
+________________________________
+
+
