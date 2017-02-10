@@ -1,0 +1,133 @@
+('All lines:', 9999)
+('Correct lines:', 9994)
+############# RDD: method 1 (single steps) ###############
+________________________________
+Iteration #1:
+Number of new paths: 27759
+
+Iteration time: 1.575095 s.
+________________________________
+Iteration #2:
+Number of new paths: 70694
+
+Iteration time: 2.323419 s.
+________________________________
+Iteration #3:
+Number of new paths: 156968
+
+Iteration time: 3.430770 s.
+________________________________
+Iteration #4:
+Number of new paths: 288205
+
+Iteration time: 5.164969 s.
+________________________________
+Iteration #5:
+Number of new paths: 424651
+
+Iteration time: 8.117595 s.
+________________________________
+Iteration #6:
+Number of new paths: 509881
+
+Iteration time: 12.010313 s.
+________________________________
+Iteration #7:
+Number of new paths: 501551
+
+Iteration time: 16.687064 s.
+________________________________
+Iteration #8:
+Number of new paths: 422735
+
+Iteration time: 23.111429 s.
+________________________________
+Iteration #9:
+Number of new paths: 316498
+
+Iteration time: 28.460243 s.
+________________________________
+Iteration #10:
+Number of new paths: 220664
+
+Iteration time: 30.114627 s.
+________________________________
+Iteration #11:
+Number of new paths: 145542
+
+Iteration time: 32.190771 s.
+________________________________
+Iteration #12:
+Number of new paths: 90527
+
+Iteration time: 34.658926 s.
+________________________________
+Iteration #13:
+Number of new paths: 52112
+
+Iteration time: 36.298179 s.
+________________________________
+Iteration #14:
+Number of new paths: 28499
+
+Iteration time: 46.212232 s.
+________________________________
+Iteration #15:
+Number of new paths: 15325
+
+Iteration time: 39.773159 s.
+________________________________
+Iteration #16:
+Number of new paths: 8554
+
+Iteration time: 40.468623 s.
+________________________________
+Iteration #17:
+Number of new paths: 4686
+
+Iteration time: 39.361118 s.
+________________________________
+Iteration #18:
+Number of new paths: 2195
+
+Iteration time: 39.209572 s.
+________________________________
+Iteration #19:
+Number of new paths: 1005
+
+Iteration time: 39.324589 s.
+________________________________
+Iteration #20:
+Number of new paths: 398
+
+Iteration time: 39.884378 s.
+________________________________
+Iteration #21:
+Number of new paths: 152
+
+Iteration time: 49.994906 s.
+________________________________
+Iteration #22:
+Number of new paths: 51
+
+Iteration time: 42.023762 s.
+________________________________
+Iteration #23:
+Number of new paths: 11
+
+Iteration time: 42.298662 s.
+________________________________
+Iteration #24:
+Number of new paths: 0
+
+Iteration time: 42.949814 s.
+No new paths, finishing...
+
+
+________________________________
+Total paths found: 3298657
+Number of iterations: #24
+
+Collecting time: 0.000015 s.
+Total time elapsed: 695.644230 s.
+________________________________

@@ -5,17 +5,17 @@
 
 import time
 
-from pyspark import SparkContext
-sc = SparkContext("local", "Simple RDD")
-
 
 # In[2]:
 
 # Config
-file = "data/test-graph.txt"
+file = "data/p2p-Gnutella05_10000.txt"
 max_iter = 100
-num_partition = 4
+num_partition = 12
 debug = False
+
+from pyspark import SparkContext
+sc = SparkContext("local[4]", "Simple RDD")
 
 
 # In[3]:
@@ -57,7 +57,7 @@ def compose(r1, r2):
     return joined.values()
 
 
-# In[6]:
+# In[ ]:
 
 print("############# RDD: method 1 (single steps) ###############")
 new_paths = edges
@@ -69,23 +69,19 @@ true_start = start
 # invariant:
 ###  - all_paths and new_paths are on 'num_partitions' partitions
 
+last_count = all_paths.count()
+
 for i in range(1, max_iter):
     print("________________________________")
     print("Iteration #%d:" % (i,))
-    new_paths = compose(new_paths, edges)
+    new_paths = compose(all_paths, edges)
     # Leave only really new paths
-    new_paths = new_paths.subtract(all_paths).distinct(num_partition)
-    new_paths.cache()
-    print("Number of new paths: %d\n" % (new_paths.count(),))
+    all_paths = all_paths.union(new_paths).distinct()
     
-    # Finish, when no more paths added
-    if new_paths.isEmpty():
-        print("No new paths, finishing...")
-        break
-    
-    # Add new paths to all paths
-    all_paths = all_paths.union(new_paths).coalesce(num_partition)
-    all_paths.cache()
+    count = all_paths.count()
+    diff_count = count - last_count
+    last_count = count
+    print("Number of new paths: %d\n" % (diff_count,))
     
     if debug:
         print(new_paths.take(1000), '\n')
@@ -93,9 +89,14 @@ for i in range(1, max_iter):
     end = time.time()
     print("Iteration time: %f s." % (end - start,))
     start = end
+    
+    # Finish, when no more paths added
+    if diff_count == 0:
+        print("No new paths, finishing...")
+        break
 
 print("\n\n________________________________")
-print("Total paths found: %d" % (all_paths.count(),))
+print("Total paths found: %d" % (count,))
 print("Number of iterations: #%d" % (i,))
 
 if debug:
@@ -109,7 +110,7 @@ print("Total time elapsed: %f s." % (method1_time,))
 print("________________________________\n\n")
 
 
-# In[7]:
+# In[ ]:
 
 print("############# RDD: method 2 (paths combining) ###############")
 new_paths = edges
@@ -121,23 +122,22 @@ true_start = start
 # invariant:
 ###  - all_paths and new_paths are on 'num_partitions' partitions
 
+last_count = all_paths.count()
+
 for i in range(1, max_iter):
     print("________________________________")
     print("Iteration #%d:" % (i,))
     new_paths = compose(all_paths, all_paths)
     # Leave only really new paths
-    new_paths = new_paths.subtract(all_paths).distinct(num_partition)
-    new_paths.cache()
-    print("Number of new paths: %d\n" % (new_paths.count(),))
+    all_paths = all_paths.union(new_paths).distinct()
     
-    # Finish, when no more paths added
-    if new_paths.isEmpty():
-        print("No new paths, finishing...")
-        break
+    count = all_paths.count()
+    diff_count = count - last_count
+    last_count = count
     
-    # Add new paths to all paths
-    all_paths = all_paths.union(new_paths).coalesce(num_partition)
-    all_paths.cache()
+    print("NUM a:", all_paths.getNumPartitions())
+    
+    print("Number of new paths: %d\n" % (diff_count,))
     
     if debug:
         print(new_paths.take(1000), '\n')
@@ -145,6 +145,12 @@ for i in range(1, max_iter):
     end = time.time()
     print("Iteration time: %f s." % (end - start,))
     start = end
+    
+    # Finish, when no more paths added
+    if diff_count == 0:
+        print("No new paths, finishing...")
+        break
+        
 
 print("\n\n________________________________")
 print("Total paths found: %d" % (all_paths.count(),))
@@ -161,68 +167,11 @@ print("Total time elapsed: %f s." % (method2_time,))
 print("________________________________\n\n")
 
 
-# In[8]:
-
-print("############# RDD: method 3 (paths combining 'optimized') ###############")
-
-start = time.time()
-true_start = start
-
-all_paths = edges
-new_paths = compose(edges, edges)
-new_paths = new_paths.subtract(all_paths).distinct(num_partition)
-# invariant:
-###  - all_paths and new_paths are disjoint
-###  - all_paths and new_paths are on 'num_partitions' partitions
-
-for i in range(2, max_iter):
-    print("________________________________")
-    print("Iteration #%d:" % (i,))
-    # Obtain new paths by composing old ones
-    all_x_new_paths = compose(all_paths, new_paths)
-    new_x_all_paths = compose(new_paths, all_paths)
-    new_x_new_paths = compose(new_paths, new_paths)
-    # Leave only really new paths
-    all_paths = all_paths.union(new_paths).coalesce(num_partition)
-    all_paths.cache()
-    new_paths = all_x_new_paths.union(new_x_all_paths).union(new_x_new_paths)
-    new_paths = new_paths.subtract(all_paths).distinct(num_partition)
-    new_paths.cache()
-    print("Number of new paths: %d\n" % (new_paths.count(),))
-    
-    # Finish, when no more paths added
-    if new_paths.isEmpty():
-        print("No new paths, finishing...")
-        break
-    
-    if debug:
-        print(new_paths.take(1000), '\n')
-        
-    end = time.time()
-    print("Iteration time: %f s." % (end - start,))
-    start = end
-
-print("\n\n________________________________")
-print("Total paths found: %d" % (all_paths.count(),))
-print("Number of iterations: #%d" % (i,))
-
-if debug:
-    print()
-    print(all_paths.take(1000), '\n')
-
-true_end = time.time()
-method3_time = true_end - true_start
-print("\nCollecting time: %f s." % (true_end - start,))
-print("Total time elapsed: %f s." % (method3_time,))
-print("________________________________\n\n")
-
-
-# In[10]:
+# In[ ]:
 
 print("########### Summary ############")
 print("Method 1: %f s." % (method1_time,))
 print("Method 2: %f s." % (method2_time,))
-print("Method 3: %f s." % (method3_time,))
 
 
 # In[ ]:
